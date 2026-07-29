@@ -1,1 +1,1 @@
-const BASE_URL = 'https://your-backend.onrender.com'; // you'll update this after Step 2
+const BASE_URL ="https://hostelite-backend-qm68.onrender.com/"
