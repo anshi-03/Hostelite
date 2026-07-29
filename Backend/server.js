@@ -12,7 +12,7 @@ const allowedOrigins = [
   'http://127.0.0.1:3000',
   'http://localhost:5500',
   'http://127.0.0.1:5500',
-  'https://your-frontend.vercel.app' // update this after Step 3
+  'https://hostelite-alpha.vercel.app/' // update this after Step 3
 ];
 
 app.use(cors({
