@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hostelite</title>
+  <link rel="icon" type="image/png" href="logo.png"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html">
+        <img src="logo.png" alt="Hostelite Logo" id="nav-logo-img"/>
+        <span>HOSTELLITE</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+
+        <!-- Recipe dropdown — shows logged-in user's recipes -->
+        <div class="nav-dropdown" id="recipe-dropdown">
+          <a href="javascript:void(0)">Recipe</a>
+          <div class="dropdown-menu" id="my-recipes-dropdown">
+            <div class="drop-header">My Recipes</div>
+            <div class="drop-empty" id="dropdown-loading">Sign in to see your recipes</div>
+          </div>
+        </div>
+
+        <a href="about.html">About</a>
+      </div>
+
+      <!-- SEARCH BAR -->
+      <div class="search-bar-wrap" style="margin-left: 16px;">
+        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" id="search-input" placeholder="Search recipes..."/>
+      </div>
+
+      <div class="nav-actions">
+        <a class="btn-outline" id="nav-saved-btn" href="saved.html" style="display:none;">🔖 Saved</a>
+        <button class="btn-outline" id="nav-signup-btn" onclick="location.href='signup.html'">Sign in</button>
+        <button class="btn-solid"   id="nav-login-btn"  onclick="location.href='login.html'">Login</button>
+        <span id="nav-user-name" style="display:none; font-weight:700; color:var(--red); font-size:0.95rem;"></span>
+        <button class="btn-solid" id="nav-logout-btn" style="display:none;" onclick="logout()">Logout</button>
+        <button class="btn-outline" id="nav-upload-btn" style="display:none;" onclick="location.href='upload.html'">+ Share Recipe</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO TAGLINE -->
+  <div class="hero-tagline">
+    <p>Hostelite — where every recipe tells a hostel story</p>
+  </div>
+
+  <div class="page-content">
+    <!-- RECIPES SECTION -->
+    <div class="section-label" id="recipes">
+      <h2>Latest Recipes</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="recipe-grid" id="recipe-grid">
+      <div class="spinner-wrap"><div class="spinner"></div></div>
+    </div>
+  </div>
+
+  <!-- COOK-CONNECT-CONQUER -->
+  <div class="ccc-banner">
+    <p>Cook &nbsp;·&nbsp; Connect &nbsp;·&nbsp; Conquer</p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    &copy; 2026 <span>Hostelite</span>. Made with ❤️ by hostellers, for hostellers.
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+  
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dropdown.js"></script>
+</body>
+</html>

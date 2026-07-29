@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Saved Recipes — Hostelite</title>
+  <link rel="icon" type="image/png" href="logo.png"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html">
+        <img src="logo.png" alt="Hostelite Logo"/>
+        <span>HOSTELLITE</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <div class="nav-dropdown" id="recipe-dropdown">
+          <a href="javascript:void(0)">Recipe</a>
+          <div class="dropdown-menu" id="my-recipes-dropdown">
+            <div class="drop-header">My Recipes</div>
+            <div class="drop-empty">Loading...</div>
+          </div>
+        </div>
+        <a href="about.html">About</a>
+      </div>
+      <div class="search-bar-wrap" style="margin-left:16px;">
+        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" id="search-input" placeholder="Search saved..."/>
+      </div>
+      <div class="nav-actions">
+        <a class="btn-outline" href="saved.html" style="display:inline-block; color:var(--red); border-color:var(--red);">🔖 Saved</a>
+        <span id="nav-user-name" style="display:none; font-weight:700; color:var(--red); font-size:0.95rem;"></span>
+        <button class="btn-solid" id="nav-logout-btn" style="display:none;" onclick="logout()">Logout</button>
+        <button class="btn-outline" id="nav-signup-btn" onclick="location.href='signup.html'">Sign in</button>
+        <button class="btn-solid"   id="nav-login-btn"  onclick="location.href='login.html'">Login</button>
+        <button class="btn-outline" id="nav-upload-btn" style="display:none;" onclick="location.href='upload.html'">+ Share Recipe</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="hero-tagline">
+    <p>Hostelite — where every recipe tells a hostel story</p>
+  </div>
+
+  <div class="page-content">
+    <div class="saved-page-header">
+      <h2>🔖 Your Saved Recipes</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="recipe-grid" id="saved-grid">
+      <div class="spinner-wrap"><div class="spinner"></div></div>
+    </div>
+  </div>
+
+  <div class="ccc-banner">
+    <p>Cook &nbsp;·&nbsp; Connect &nbsp;·&nbsp; Conquer</p>
+  </div>
+
+  <footer>
+    &copy; 2026 <span>Hostelite</span>. Made with ❤️ by hostellers, for hostellers.
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dropdown.js"></script>
+  <script>
+    const API_S = `${BASE_URL}/api`;
+
+    // ✅ Use localStorage to navigate to recipe
+    function goToRecipeS(id) {
+      localStorage.setItem('currentRecipeId', id);
+      window.location.href = 'recipe.html';
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    function heartSVG(f) {
+      return f
+        ? `<svg viewBox="0 0 24 24" fill="var(--red)" stroke="var(--red)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`
+        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+    }
+
+    function bookmarkSVG(f) {
+      return f
+        ? `<svg viewBox="0 0 24 24" fill="var(--red)" stroke="var(--red)" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`
+        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
+    }
+
+    function commentSVG() {
+      return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
+    }
+
+    let allSaved   = [];
+    let currentMe  = null;
+
+    function buildSavedCard(recipe, userId) {
+      const isLiked = userId ? recipe.likes.includes(userId) : false;
+      const author  = recipe.author
+        ? `${recipe.author.firstname} ${recipe.author.lastname}`
+        : 'Anonymous';
+      const id = recipe._id;
+
+      const media = recipe.mediaType === 'video'
+        ? `<video class="card-media-video" src="${recipe.mediaUrl}" muted playsinline preload="metadata" onclick="goToRecipeS('${id}')" style="cursor:pointer;"></video>`
+        : `<img class="card-media" src="${recipe.mediaUrl}" alt="${recipe.title}" loading="lazy" onclick="goToRecipeS('${id}')" style="cursor:pointer;"/>`;
+
+      return `
+        <div class="card" data-id="${id}">
+          ${media}
+          <div class="card-body">
+            <div class="card-author">${author}</div>
+            <div class="card-title">${recipe.title}</div>
+            <div class="card-desc">${recipe.description}</div>
+          </div>
+          <div class="card-footer">
+            <button class="icon-btn like-btn ${isLiked ? 'active' : ''}" onclick="toggleLikeS('${id}', this)">
+              ${heartSVG(isLiked)} <span class="like-count">${recipe.likes.length}</span>
+            </button>
+            <button class="icon-btn" onclick="goToRecipeS('${id}')">
+              ${commentSVG()} <span>${recipe.comments.length}</span>
+            </button>
+            <button class="icon-btn save-btn active" onclick="unsaveRecipe('${id}', this)">
+              ${bookmarkSVG(true)}
+            </button>
+            <button class="card-view-link" onclick="goToRecipeS('${id}')">View →</button>
+          </div>
+        </div>`;
+    }
+
+    function renderSaved(recipes) {
+      const grid = document.getElementById('saved-grid');
+      if (!recipes.length) {
+        grid.innerHTML = `<div class="empty-state"><p>No saved recipes found.</p></div>`;
+        return;
+      }
+      grid.innerHTML = recipes.map(r => buildSavedCard(r, currentMe?._id)).join('');
+    }
+
+    async function toggleLikeS(id, btn) {
+      const token = getToken();
+      if (!token) { showToast('Login to like'); return; }
+      try {
+        const res  = await fetch(`${API_S}/recipes/${id}/like`, {
+          method: 'PUT',
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        btn.classList.toggle('active', data.liked);
+        btn.innerHTML = heartSVG(data.liked) + ` <span class="like-count">${data.likes}</span>`;
+      } catch { showToast('Something went wrong'); }
+    }
+
+    async function unsaveRecipe(id, btn) {
+      const token = getToken();
+      if (!token) return;
+
+      try {
+        await fetch(`${API_S}/users/save/${id}`, {
+          method: 'PUT',
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        // Animate and remove card
+        const card = btn.closest('.card');
+        card.style.opacity    = '0';
+        card.style.transform  = 'scale(0.95)';
+        card.style.transition = 'all 0.3s';
+
+        setTimeout(() => {
+          card.remove();
+          allSaved = allSaved.filter(r => r._id !== id);
+          if (!document.querySelectorAll('#saved-grid .card').length) {
+            document.getElementById('saved-grid').innerHTML = `
+              <div class="empty-state">
+                <p>No saved recipes left. <a href="index.html" style="color:var(--red);font-weight:700;">Browse recipes →</a></p>
+              </div>`;
+          }
+        }, 300);
+
+        showToast('Recipe unsaved');
+      } catch { showToast('Something went wrong'); }
+    }
+
+    async function loadSaved() {
+      const token = getToken();
+      const grid  = document.getElementById('saved-grid');
+
+      if (!token) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <p>Please <a href="login.html" style="color:var(--red);font-weight:700;">login</a> to see your saved recipes.</p>
+          </div>`;
+        return;
+      }
+
+      try {
+        // Get current user with their saved recipe IDs
+        const meRes  = await fetch(`${API_S}/users/me`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        currentMe    = await meRes.json();
+
+        const savedIds = (currentMe.savedRecipes || []).map(r =>
+          typeof r === 'object' ? r._id : r
+        );
+
+        if (!savedIds.length) {
+          grid.innerHTML = `
+            <div class="empty-state">
+              <p>You haven't saved any recipes yet. <a href="index.html" style="color:var(--red);font-weight:700;">Browse recipes →</a></p>
+            </div>`;
+          return;
+        }
+
+        // Fetch all recipes and filter only saved ones
+        const allRes = await fetch(`${API_S}/recipes`);
+        const all    = await allRes.json();
+        allSaved     = all.filter(r => savedIds.includes(r._id));
+
+        if (!allSaved.length) {
+          grid.innerHTML = `
+            <div class="empty-state">
+              <p>No saved recipes found. <a href="index.html" style="color:var(--red);font-weight:700;">Browse recipes →</a></p>
+            </div>`;
+          return;
+        }
+
+        renderSaved(allSaved);
+
+        // Search within saved recipes
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+          searchInput.addEventListener('input', e => {
+            const q = e.target.value.trim().toLowerCase();
+            if (!q) { renderSaved(allSaved); return; }
+            renderSaved(allSaved.filter(r =>
+              r.title.toLowerCase().includes(q) ||
+              r.description.toLowerCase().includes(q) ||
+              (r.author && `${r.author.firstname} ${r.author.lastname}`.toLowerCase().includes(q))
+            ));
+          });
+        }
+
+      } catch (err) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <p>Could not load saved recipes. Please try again.</p>
+          </div>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadSaved);
+  </script>
+</body>
+</html>

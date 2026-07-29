@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About — Hostelite</title>
+  <link rel="icon" type="image/png" href="logo.png"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html">
+        <img src="logo.png" alt="Hostelite Logo"/>
+        <span>HOSTELLITE</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <div class="nav-dropdown" id="recipe-dropdown">
+          <a href="javascript:void(0)">Recipe</a>
+          <div class="dropdown-menu" id="my-recipes-dropdown">
+            <div class="drop-header">My Recipes</div>
+            <div class="drop-empty">Loading...</div>
+          </div>
+        </div>
+        <a href="about.html" style="color:var(--red);">About</a>
+      </div>
+      <div class="nav-actions">
+        <span id="nav-user-name" style="display:none; font-weight:700; color:var(--red); font-size:0.95rem;"></span>
+        <button class="btn-solid" id="nav-logout-btn" style="display:none;" onclick="logout()">Logout</button>
+        <button class="btn-outline" id="nav-signup-btn" onclick="location.href='signup.html'">Sign in</button>
+        <button class="btn-solid"   id="nav-login-btn"  onclick="location.href='login.html'">Login</button>
+        <button class="btn-outline" id="nav-upload-btn" style="display:none;" onclick="location.href='upload.html'">+ Share Recipe</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-content">
+    <!-- HERO -->
+    <div class="about-hero">
+      <h1>HOSTELITE</h1>
+      <p>Where every recipe tells a hostel story — born out of hunger, creativity, and a single induction cooktop.</p>
+    </div>
+
+    <div class="about-body">
+
+      <!-- WHAT IS HOSTELITE -->
+      <div class="about-section">
+        <h2><span class="icon">🏠</span> What is Hostelite?</h2>
+        <p>
+          Hostelite is a community-driven recipe platform built specifically for hostel students and anyone living away from home.
+          We know the struggle — a tiny kitchen, limited ingredients, a tight budget, and a craving for something that actually tastes good.
+          Hostelite is the place where those late-night cooking experiments become recipes that inspire thousands of others just like you.
+        </p>
+      </div>
+
+      <!-- OUR STORY -->
+      <div class="about-section">
+        <h2><span class="icon">📖</span> Our Story</h2>
+        <p>
+          It started with a packet of Maggi and a borrowed pan. Two hostel students, frustrated by the lack of a platform that understood
+          their cooking reality, decided to build one. No fancy equipment. No professional chefs. Just real food, real kitchens, and real hostellers.
+          Hostelite was born to celebrate the creativity that comes out of constrained kitchens — and to connect a generation of students
+          who cook, share, and survive together.
+        </p>
+      </div>
+
+      <!-- OUR VALUES -->
+      <div class="about-section">
+        <h2><span class="icon">❤️</span> What We Stand For</h2>
+        <div class="about-values">
+          <div class="value-card">
+            <h3>🍳 Cook</h3>
+            <p>We believe anyone can cook. All it takes is curiosity, a little courage, and whatever's left in the fridge.</p>
+          </div>
+          <div class="value-card">
+            <h3>🤝 Connect</h3>
+            <p>Food brings people together. Share your recipes, discover others', and build a community around the things you love.</p>
+          </div>
+          <div class="value-card">
+            <h3>🏆 Conquer</h3>
+            <p>From a hostel room to a home kitchen — every recipe you master is a skill for life. Conquer one dish at a time.</p>
+          </div>
+          <div class="value-card">
+            <h3>💡 Innovate</h3>
+            <p>Constraints breed creativity. The best Hostelite recipes come from making something out of almost nothing.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOW IT WORKS -->
+      <div class="about-section">
+        <h2><span class="icon">⚙️</span> How It Works</h2>
+        <p>
+          Sign up for free, upload a photo or video of your recipe along with the ingredients and steps, and share it with the world.
+          Other users can like your recipe, save it for later, and leave comments. Browse the homepage to discover what hostellers
+          across the country are cooking tonight. It's that simple.
+        </p>
+      </div>
+
+      <!-- QUOTE -->
+      <div class="about-team-quote">
+        <p>"We didn't build Hostelite for chefs. We built it for the student who turned instant noodles into a three-course meal at midnight."</p>
+        <span>— The Hostelite Team</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="ccc-banner">
+    <p>Cook &nbsp;·&nbsp; Connect &nbsp;·&nbsp; Conquer</p>
+  </div>
+
+  <footer>
+    &copy; 2026 <span>Hostelite</span>. Made with ❤️ by hostellers, for hostellers.
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dropdown.js"></script>
+</body>
+</html>

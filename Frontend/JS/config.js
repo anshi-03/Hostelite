@@ -1,0 +1,1 @@
+const BASE_URL = 'https://your-backend.onrender.com'; // you'll update this after Step 2

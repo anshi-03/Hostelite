@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up — Hostelite</title>
+  <link rel="icon" type="image/png" href="logo.png"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="logo-row">
+        <img src="logo.png" alt="logo"/>
+        <span>HOSTELLITE</span>
+      </div>
+      <h2>Join the hostel kitchen!</h2>
+
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" id="firstname" placeholder="Rahul"/>
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" id="lastname" placeholder="Sharma"/>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="you@hostel.com"/>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="••••••••"/>
+      </div>
+      <div class="error-msg" id="err"></div>
+      <button class="auth-submit" onclick="doSignup()">Create Account</button>
+
+      <div class="auth-switch">
+        Already have an account? <a href="login.html">Login</a>
+      </div>
+    </div>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    async function doSignup() {
+      const firstname = document.getElementById('firstname').value.trim();
+      const lastname  = document.getElementById('lastname').value.trim();
+      const email     = document.getElementById('email').value.trim();
+      const password  = document.getElementById('password').value;
+      const err       = document.getElementById('err');
+      err.textContent = '';
+
+      if (!firstname || !lastname || !email || !password) {
+        err.textContent = 'Please fill all fields.'; return;
+      }
+
+      try {
+        const res  = await fetch('http://localhost:5000/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ firstname, lastname, email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) { err.textContent = data.msg; return; }
+
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('firstname', data.firstname);
+        window.location.href = 'index.html';
+      } catch (e) {
+        err.textContent = 'Server error. Try again.';
+      }
+    }
+  </script>
+</body>
+</html>
