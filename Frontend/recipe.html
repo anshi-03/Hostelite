@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Recipe — Hostelite</title>
-  <link rel="icon" type="image/png" href="logo.png"/>
-  <link rel="stylesheet" href="./css/style.css"/>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="stylesheet" href="./CSS/style.css" />
 </head>
+
 <body>
 
   <nav>
     <div class="nav-inner">
       <a class="nav-logo" href="index.html">
-        <img src="logo.png" alt="Hostelite Logo"/>
+        <img src="logo.png" alt="Hostelite Logo" />
         <span>HOSTELLITE</span>
       </a>
       <div class="nav-links">
@@ -30,8 +32,9 @@
         <span id="nav-user-name" style="display:none; font-weight:700; color:var(--red); font-size:0.95rem;"></span>
         <button class="btn-solid" id="nav-logout-btn" style="display:none;" onclick="logout()">Logout</button>
         <button class="btn-outline" id="nav-signup-btn" onclick="location.href='signup.html'">Sign in</button>
-        <button class="btn-solid"   id="nav-login-btn"  onclick="location.href='login.html'">Login</button>
-        <button class="btn-outline" id="nav-upload-btn" style="display:none;" onclick="location.href='upload.html'">+ Share Recipe</button>
+        <button class="btn-solid" id="nav-login-btn" onclick="location.href='login.html'">Login</button>
+        <button class="btn-outline" id="nav-upload-btn" style="display:none;" onclick="location.href='upload.html'">+
+          Share Recipe</button>
       </div>
     </div>
   </nav>
@@ -40,7 +43,9 @@
   <div class="page-content">
 
     <div class="recipe-detail" id="recipe-detail">
-      <div class="spinner-wrap"><div class="spinner"></div></div>
+      <div class="spinner-wrap">
+        <div class="spinner"></div>
+      </div>
     </div>
 
   </div>
@@ -62,4 +67,5 @@
   <script src="js/recipe.js"></script>
   <script src="js/dropdown.js"></script>
 </body>
+
 </html>

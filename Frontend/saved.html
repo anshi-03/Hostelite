@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Saved Recipes — Hostelite</title>
-  <link rel="icon" type="image/png" href="logo.png"/>
-  <link rel="stylesheet" href="./css/style.css"/>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="stylesheet" href="./CSS/style.css" />
 </head>
+
 <body>
 
   <nav>
     <div class="nav-inner">
       <a class="nav-logo" href="index.html">
-        <img src="logo.png" alt="Hostelite Logo"/>
+        <img src="logo.png" alt="Hostelite Logo" />
         <span>HOSTELLITE</span>
       </a>
       <div class="nav-links">
@@ -27,18 +29,22 @@
         <a href="about.html">About</a>
       </div>
       <div class="search-bar-wrap" style="margin-left:16px;">
-        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
         </svg>
-        <input type="text" id="search-input" placeholder="Search saved..."/>
+        <input type="text" id="search-input" placeholder="Search saved..." />
       </div>
       <div class="nav-actions">
-        <a class="btn-outline" href="saved.html" style="display:inline-block; color:var(--red); border-color:var(--red);">🔖 Saved</a>
+        <a class="btn-outline" href="saved.html"
+          style="display:inline-block; color:var(--red); border-color:var(--red);">🔖 Saved</a>
         <span id="nav-user-name" style="display:none; font-weight:700; color:var(--red); font-size:0.95rem;"></span>
         <button class="btn-solid" id="nav-logout-btn" style="display:none;" onclick="logout()">Logout</button>
         <button class="btn-outline" id="nav-signup-btn" onclick="location.href='signup.html'">Sign in</button>
-        <button class="btn-solid"   id="nav-login-btn"  onclick="location.href='login.html'">Login</button>
-        <button class="btn-outline" id="nav-upload-btn" style="display:none;" onclick="location.href='upload.html'">+ Share Recipe</button>
+        <button class="btn-solid" id="nav-login-btn" onclick="location.href='login.html'">Login</button>
+        <button class="btn-outline" id="nav-upload-btn" style="display:none;" onclick="location.href='upload.html'">+
+          Share Recipe</button>
       </div>
     </div>
   </nav>
@@ -54,7 +60,9 @@
     </div>
 
     <div class="recipe-grid" id="saved-grid">
-      <div class="spinner-wrap"><div class="spinner"></div></div>
+      <div class="spinner-wrap">
+        <div class="spinner"></div>
+      </div>
     </div>
   </div>
 
@@ -103,12 +111,12 @@
       return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
     }
 
-    let allSaved   = [];
-    let currentMe  = null;
+    let allSaved = [];
+    let currentMe = null;
 
     function buildSavedCard(recipe, userId) {
       const isLiked = userId ? recipe.likes.includes(userId) : false;
-      const author  = recipe.author
+      const author = recipe.author
         ? `${recipe.author.firstname} ${recipe.author.lastname}`
         : 'Anonymous';
       const id = recipe._id;
@@ -153,7 +161,7 @@
       const token = getToken();
       if (!token) { showToast('Login to like'); return; }
       try {
-        const res  = await fetch(`${API_S}/recipes/${id}/like`, {
+        const res = await fetch(`${API_S}/recipes/${id}/like`, {
           method: 'PUT',
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -175,8 +183,8 @@
 
         // Animate and remove card
         const card = btn.closest('.card');
-        card.style.opacity    = '0';
-        card.style.transform  = 'scale(0.95)';
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.95)';
         card.style.transition = 'all 0.3s';
 
         setTimeout(() => {
@@ -196,7 +204,7 @@
 
     async function loadSaved() {
       const token = getToken();
-      const grid  = document.getElementById('saved-grid');
+      const grid = document.getElementById('saved-grid');
 
       if (!token) {
         grid.innerHTML = `
@@ -208,10 +216,10 @@
 
       try {
         // Get current user with their saved recipe IDs
-        const meRes  = await fetch(`${API_S}/users/me`, {
+        const meRes = await fetch(`${API_S}/users/me`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        currentMe    = await meRes.json();
+        currentMe = await meRes.json();
 
         const savedIds = (currentMe.savedRecipes || []).map(r =>
           typeof r === 'object' ? r._id : r
@@ -227,8 +235,8 @@
 
         // Fetch all recipes and filter only saved ones
         const allRes = await fetch(`${API_S}/recipes`);
-        const all    = await allRes.json();
-        allSaved     = all.filter(r => savedIds.includes(r._id));
+        const all = await allRes.json();
+        allSaved = all.filter(r => savedIds.includes(r._id));
 
         if (!allSaved.length) {
           grid.innerHTML = `
@@ -265,4 +273,5 @@
     document.addEventListener('DOMContentLoaded', loadSaved);
   </script>
 </body>
+
 </html>
