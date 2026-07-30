@@ -124,7 +124,7 @@ router.put('/:id/like', auth, async (req, res) => {
     const recipe = await Recipe.findById(req.params.id);
     if (!recipe) return res.status(404).json({ msg: 'Recipe not found' });
 
-    const idx = recipe.likes.indexOf(req.user.id);
+    const idx = recipe.likes.findIndex(id => id.toString() === req.user.id);
     if (idx === -1) recipe.likes.push(req.user.id);
     else            recipe.likes.splice(idx, 1);
 

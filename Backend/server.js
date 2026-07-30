@@ -31,24 +31,23 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin(origin, callback) {
-    // Allow requests with no Origin (Postman, server-to-server)
-    if (!origin) {
-      return callback(null, true);
-    }
-
-    // Allow localhost, production domain, and Vercel preview deployments
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    const cleanOrigin = origin.replace(/\/$/, '');
     if (
-      allowedOrigins.includes(origin) ||
-      origin.endsWith(".vercel.app")
+      allowedOrigins.includes(cleanOrigin) ||
+      cleanOrigin.endsWith(".vercel.app")
     ) {
       return callback(null, true);
     }
-
-    return callback(new Error(`CORS blocked origin: ${origin}`));
+    return callback(null, false);
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+app.options('*', cors());
 
 app.use(express.json());
 

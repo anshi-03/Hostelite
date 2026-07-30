@@ -1,1 +1,1 @@
-const BASE_URL ="https://hostelite-backend-qm68.onrender.com/"
+const BASE_URL = "https://hostelite-backend-qm68.onrender.com";

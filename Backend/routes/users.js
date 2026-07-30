@@ -18,8 +18,7 @@ router.get('/me', auth, async (req, res) => {
 router.put('/save/:recipeId', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
-    const idx = user.savedRecipes.indexOf(req.params.recipeId);
-
+    const idx = user.savedRecipes.findIndex(id => id.toString() === req.params.recipeId);
 
     if (idx === -1) user.savedRecipes.push(req.params.recipeId);
     else user.savedRecipes.splice(idx, 1);
